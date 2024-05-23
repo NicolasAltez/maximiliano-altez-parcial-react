@@ -24,8 +24,12 @@ function App() {
       return "El rating debe ser un número";
     }
 
-    if (filmName.length < 3 || filmDescription.length < 3) {
-      return "El nombre y la descripción deben tener al menos 3 caracteres";
+    if (filmName.length < 3 || filmName.trim() !== filmName){
+      return "El nombre de la película debe tener al menos 3 caracteres y no debe tener espacios en blanco al inicio";
+    }
+
+    if (filmDescription.length < 6){
+      return "La descripción de la película debe tener al menos 6 caracteres";
     }
 
     const today = new Date();
