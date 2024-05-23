@@ -11,35 +11,40 @@ function App() {
   const [error, setError] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setError("");
-    setSubmitted(false);
-
+  const validateForm = () => {
     if (!filmName || !filmDescription || !filmDate || !genre || !filmRating) {
-      setError("Todos los campos son obligatorios");
-      return;
+      return "Todos los campos son obligatorios";
     }
 
     if (filmRating < 1 || filmRating > 5) {
-      setError("El rating debe ser un número entre 1 y 5");
-      return;
+      return "El rating debe ser un número entre 1 y 5";
     }
 
     if (isNaN(filmRating)) {
-      setError("El rating debe ser un número");
-      return;
+      return "El rating debe ser un número";
     }
 
     if (filmName.length < 3 || filmDescription.length < 3) {
-      setError("El nombre y la descripción deben tener al menos 3 caracteres");
-      return;
+      return "El nombre y la descripción deben tener al menos 3 caracteres";
     }
 
     const today = new Date();
     const filmDateFormatted = new Date(filmDate);
     if (filmDateFormatted > today) {
-      setError("La fecha de estreno no puede ser mayor a la fecha actual");
+      return "La fecha de estreno no puede ser mayor a la fecha actual";
+    }
+
+    return null;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setError("");
+    setSubmitted(false);
+
+    const errorMessage = validateForm();
+    if (errorMessage) {
+      setError(errorMessage);
       return;
     }
 
@@ -103,7 +108,9 @@ function App() {
           />
         </div>
         <button type="submit">Enviar</button>
-        <button type="button" onClick={handleReset}>Limpiar</button>
+        <button type="button" onClick={handleReset}>
+          Limpiar
+        </button>
       </form>
       {error && <p className="error">{error}</p>}
       {submitted && (
